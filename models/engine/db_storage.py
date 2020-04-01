@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""New storage engine Class: DBStorage """
+"""
+New storage engine Class: DBStorage
+"""
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -51,7 +53,6 @@ class DBStorage():
     def new(self, obj):
         """
         add the object to the current database session (self.__session)
-        
         """
         self.__session.add(obj)
 
