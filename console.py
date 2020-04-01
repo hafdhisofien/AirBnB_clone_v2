@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """This is the console for AirBnB"""
 import cmd
+import re
 from models import storage
 from datetime import datetime
 from models.base_model import BaseModel
@@ -32,17 +33,30 @@ class HBNBCommand(cmd.Cmd):
         """Quit command to exit the program at end of file"""
         return True
 
-    def do_create(self, line):
-        """Creates a new instance of BaseModel, saves it
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
+    def do_create(self, arg):
+        """
+        Creates a new instance of a class
         """
         try:
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
+            newdict = dict()
+            classname = str(my_list[0])
+            del my_list[0]
+            for i in range(len(my_list)):
+                my_list[i] = my_list[i].split("=")
+            for key, value in my_list:
+                if type(eval(value)) is str:
+                    value = value[1:]
+                    value = value[:-1]
+                    value = value.replace("_", " ")
+                    value = value.replace('"', '\\"')
+                    newdict[key] = str(value)
+                else:
+                    newdict[key] = eval(value)
+            obj = eval("{}()".format(classname))
+            obj.__dict__.update(newdict)
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
