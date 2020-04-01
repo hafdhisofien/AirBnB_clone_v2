@@ -5,6 +5,7 @@ import models
 from os import getenv
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+from models.review import Review
 
 
 class Place(BaseModel, Base):
@@ -34,6 +35,21 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
+    reviews = relationship('Review', backref='place',
+                               cascade='all, delete-orphan')
+
+    if models.storage_type != 'db':
+        @property
+        def reviews(self):
+            """
+            getter for the review attributes
+            """
+            my_list = []
+            all_reviews = models.storage.all(Review)
+            for review in all_reviews.values():
+                if review.place_id == self.id:
+                    my_list.append(review)
+            return my_list
 
     def __init__(self, *args, **kwargs):
         """initializes Place"""
