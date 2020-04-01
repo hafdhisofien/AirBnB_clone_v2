@@ -5,7 +5,20 @@ import models
 from os import getenv
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+from models.city import City
 from models.review import Review
+from models.amenity import Amenity
+
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    place_amenity = Table('place_amenity', Base.metadata,
+                          Column('place_id',
+                                 String(60),
+                                 ForeignKey('places.id'),
+                                 primary_key=True, nullable=False),
+                          Column('amenity_id',
+                                 String(60),
+                                 ForeignKey('amenities.id'),
+                                 primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -37,6 +50,9 @@ class Place(BaseModel, Base):
     amenity_ids = []
     reviews = relationship('Review', backref='place',
                                cascade='all, delete-orphan')
+    amenities = relationship("Amenity", secondary="place_amenity",
+                                 backref="places",
+                                 viewonly=False)
 
     if models.storage_type != 'db':
         @property
@@ -50,6 +66,26 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     my_list.append(review)
             return my_list
+
+        @property
+        def amenities(self):
+            """
+            getter for the amenity attributes
+            """
+            my_list = []
+            all_amenities = models.storage.all(Amenity)
+            for amenity in all_amenities.values():
+                if amenity.place_id == self.id:
+                    my_list.append(amenity)
+            return my_list
+
+        @amenities.setter
+        def amenities(self, obj):
+            """
+            Setter method for amenities
+            """
+            if (type(obj) == Amenity):
+                self.amenity_ids.append(obj.id)
 
     def __init__(self, *args, **kwargs):
         """initializes Place"""

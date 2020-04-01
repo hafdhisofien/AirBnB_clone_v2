@@ -25,12 +25,12 @@ class State(BaseModel, Base):
             """
             getter of city list
             """
-            my_list = []
+            city_list = []
             all_cities = models.storage.all(City)
             for city in all_cities.values():
                 if city.state_id == self.id:
-                    my_list.append(city)
-            return my_list
+                    city_list.append(city)
+            return city_list
 
     def __init__(self, *args, **kwargs):
         """initializes state"""
