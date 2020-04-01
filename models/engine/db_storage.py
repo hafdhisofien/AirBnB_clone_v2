@@ -2,19 +2,21 @@
 """
 New storage engine Class: DBStorage
 """
-from os import getenv
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+import models
+from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from models.city import City
 from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-from models.amenity import Amenity
+from os import getenv
+import sqlalchemy
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-classes = {"State": State, "City": City, "User": User,
-           "Place": Place, "Review": Review, "Amenity": Amenity}
+classes = {"Amenity": Amenity, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class DBStorage():
@@ -23,6 +25,7 @@ class DBStorage():
     """
     __engine = None
     __session = None
+
 
     def __init__(self):
         """
@@ -41,14 +44,14 @@ class DBStorage():
         """
         query on the current database session (self.__session)
         """
-        current_dict = {}
-        for Class in classes:
-            if cls is Class or cls is classes[Class] or cls is None:
-                objs = self.__session.query(classes[Class]).all()
+        new_dict = {}
+        for ls in classes:
+            if cls is None or cls is classes[ls] or cls is ls:
+                objs = self.__session.query(classes[ls]).all()
                 for obj in objs:
                     key = obj.__class__.__name__ + '.' + obj.id
-                    current_dict[key] = obj
-        return (current_dict)
+                    new_dict[key] = obj
+        return new_dict
 
     def new(self, obj):
         """
