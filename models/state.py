@@ -34,5 +34,5 @@ class State(BaseModel, Base):
             return city_list
 
     def __init__(self, *args, **kwargs):
-        """initializes user"""
+        """initializes state"""
         super().__init__(*args, **kwargs)
