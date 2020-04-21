@@ -23,6 +23,7 @@ def HBNB():
     """
     return 'HBNB'
 
+
 @app.route('/c/<text>', strict_slashes=False)
 def c_route(text):
     """
@@ -30,6 +31,7 @@ def c_route(text):
     (replace underscore _ symbols with a space )
     """
     return 'C ' + text.replace('_', ' ')
+
 
 @app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
@@ -40,12 +42,14 @@ def python_route(text='is cool'):
     """
     return 'Python ' + text.replace('_', ' ')
 
+
 @app.route('/number/<int:n>', strict_slashes=False)
 def is_a_number(n):
     """
     display n is a number only if n is an integer
     """
     return "{:d} is a number".format(n)
+
 
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def only_if_number(n):

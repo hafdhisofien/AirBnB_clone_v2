@@ -23,6 +23,7 @@ def HBNB():
     """
     return 'HBNB'
 
+
 @app.route('/c/<text>', strict_slashes=False)
 def c_route(text):
     """
@@ -30,6 +31,7 @@ def c_route(text):
     (replace underscore _ symbols with a space )
     """
     return 'C ' + text.replace('_', ' ')
+
 
 @app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
