@@ -77,14 +77,6 @@ def list_all_states():
     return render_template('7-states_list.html', state_list=state_list)
 
 
-@app.teardown_appcontext
-def teardown_session(self):
-    """
-    teardown session
-    """
-    storage.close()
-
-
 @app.route('/cities_by_states', strict_slashes=False)
 def list_all_states_and_cities():
     """
@@ -93,6 +85,14 @@ def list_all_states_and_cities():
     list_state_and_cities = storage.all('State')
     return render_template('8-cities_by_states.html',
                            list_state_and_cities=list_state_and_cities)
+
+
+@app.teardown_appcontext
+def teardown_session(self):
+    """
+    teardown session
+    """
+    storage.close()
 
 
 if __name__ == '__main__':
