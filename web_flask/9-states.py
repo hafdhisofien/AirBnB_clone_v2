@@ -90,7 +90,9 @@ def list_all_states_and_cities():
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def states_by_id(id=None):
-    """display the states and cities listed in alphabetical order"""
+    """
+    init states
+    """
     states = storage.all("State")
     if id is not None:
         id = 'State.' + id
