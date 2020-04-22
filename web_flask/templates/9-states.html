@@ -5,7 +5,7 @@
     </HEAD>
 
 <BODY>
-      {% if states is not none%}
+      {% if not id%}
         <H1>States</H1>
 	<UL>
 	      {% for value in states.values()|sort(attribute='name') %}
